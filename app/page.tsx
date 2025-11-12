@@ -1,61 +1,100 @@
+// page.tsx
+
+"use client"; // Diperlukan untuk state menu mobile
+
 import Image from "next/image";
 import {
   Github,
   Linkedin,
   Twitter,
-  Instagram, 
+  Instagram,
   Youtube,
   Mail,
   Phone,
   MapPin,
   ExternalLink,
+  Menu, // <-- Ditambahkan untuk ikon hamburger
+  X, // <-- Ditambahkan untuk ikon 'tutup'
 } from "lucide-react";
+import { useState } from "react"; // <-- Ditambahkan untuk mengelola state Navbar
 
-// --- Komponen Navbar ---
+// --- Komponen Navbar (Sudah Diperbarui) ---
 const Navbar = () => {
+  // State untuk melacak status menu mobile (terbuka/tertutup)
+  const [isOpen, setIsOpen] = useState(false);
+
+  const navItems = [
+    { name: "Home", href: "#hero" },
+    // { name: "Experience", href: "#experience" },
+    { name: "Proyek", href: "#projects" },
+    { name: "Pendidikan", href: "#education" },
+    { name: "Contact", href: "#contact" },
+  ];
+
   return (
     <nav className="fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow-md z-10">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+          {/* --- Logo/Nama --- */}
           <div className="flex-shrink-0">
             <span className="text-2xl font-bold text-black dark:text-white">
               Budayakan
             </span>
           </div>
+
+          {/* --- Menu Desktop --- */}
           <div className="hidden sm:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              <a
-                href="#hero"
-                className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Home
-              </a>
-              {/* <a
-                href="#experience"
-                className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Experience
-              </a> */}
-              <a
-                href="#projects"
-                className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Proyek
-              </a>
-              <a
-                href="#education"
-                className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Pendidikan
-              </a>
-              <a
-                href="#contact"
-                className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Contact
-              </a>
+              {navItems.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  {item.name}
+                </a>
+              ))}
             </div>
           </div>
+
+          {/* --- Tombol Hamburger (Hanya Mobile) --- */}
+          <div className="sm:hidden flex items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              type="button"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+              aria-controls="mobile-menu"
+              aria-expanded="false"
+            >
+              <span className="sr-only">Buka menu utama</span>
+              {/* Ganti ikon berdasarkan state */}
+              {isOpen ? (
+                <X className="block h-6 w-6" />
+              ) : (
+                <Menu className="block h-6 w-6" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* --- Menu Mobile (Dropdown) --- */}
+      {/* Tampilkan/sembunyikan berdasarkan state 'isOpen' */}
+      <div
+        className={`${isOpen ? "block" : "hidden"} sm:hidden`}
+        id="mobile-menu"
+      >
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          {navItems.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              onClick={() => setIsOpen(false)} // Tutup menu saat link diklik
+              className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium"
+            >
+              {item.name}
+            </a>
+          ))}
         </div>
       </div>
     </nav>
@@ -91,7 +130,10 @@ const Hero = () => {
         </h2>
         <p className="max-w-md text-lg leading-7 text-zinc-600 dark:text-zinc-400">
           {/* --- GANTI DESKRIPSI SINGKAT ANDA DI SINI --- */}
-          With full name Abu Zaahid Ahmad, known as Abu or Zaahid. Currently looking for work to fullfill his life and his small family. Little bit shy but can be attractive and active. He can work as a team or individual. 
+          With full name Abu Zaahid Ahmad, known as Abu or Zaahid. Currently
+          looking for work to fullfill his life and his small family. Little
+          bit shy but can be attractive and active. He can work as a team or
+          individual.
         </p>
       </div>
     </section>
@@ -100,54 +142,7 @@ const Hero = () => {
 
 // // --- Komponen Pengalaman Kerja ---
 // const WorkExperience = () => {
-//   // --- GANTI DATA PENGALAMAN KERJA DI SINI ---
-//   const experiences = [
-//     {
-//       role: "Senior Frontend Developer",
-//       company: "Tech Corp",
-//       period: "2022 - Sekarang",
-//       description:
-//         "Memimpin pengembangan UI/UX untuk produk SaaS utama perusahaan menggunakan React dan TypeScript.",
-//     },
-//     {
-//       role: "Web Developer",
-//       company: "Startup XYZ",
-//       period: "2020 - 2022",
-//       description:
-//         "Membangun dan memelihara aplikasi web e-commerce menggunakan Next.js dan Tailwind CSS.",
-//     },
-//   ];
-
-//   return (
-//     <section id="experience" className="py-16">
-//       <h2 className="text-3xl font-bold mb-8 text-center sm:text-left text-black dark:text-white">
-//         Pengalaman Kerja
-//       </h2>
-//       <div className="flex flex-col gap-6">
-//         {experiences.map((exp, index) => (
-//           <div
-//             key={index}
-//             className="p-6 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
-//           >
-//             <div className="flex justify-between items-center mb-2">
-//               <h3 className="text-xl font-semibold text-black dark:text-white">
-//                 {exp.role}
-//               </h3>
-//               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-//                 {exp.period}
-//               </span>
-//             </div>
-//             <h4 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-3">
-//               {exp.company}
-//             </h4>
-//             <p className="text-base text-zinc-600 dark:text-zinc-400">
-//               {exp.description}
-//             </p>
-//           </div>
-//         ))}
-//       </div>
-//     </section>
-//   );
+//   // ... (Kode pengalaman kerja Anda tetap di sini jika ingin dipakai)
 // };
 
 // --- KOMPONEN: PROYEK ---
@@ -210,7 +205,7 @@ const Projects = () => {
   );
 };
 
-// --- KOMPONEN: PENDIDIKAN ---
+// --- KOMPONEN: PENDIDIKAN (Sudah Diperbarui) ---
 const Education = () => {
   // --- GANTI DATA PENDIDIKAN ANDA DI SINI ---
   const educationHistory = [
@@ -242,11 +237,12 @@ const Education = () => {
             key={index}
             className="p-6 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
           >
-            <div className="flex justify-between items-center mb-1">
+            {/* --- Bagian Ini Sudah Diperbarui --- */}
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-1 gap-1 sm:gap-0">
               <h3 className="text-xl font-semibold text-black dark:text-white">
                 {edu.institution}
               </h3>
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400 flex-shrink-0">
                 {edu.period}
               </span>
             </div>
@@ -317,24 +313,24 @@ const SocialLinks = () => {
 
 // --- Komponen Tabel Kontak ---
 const ContactTable = () => {
-  // --- GANTI INFO KONTAK ANDA DI SINI ---
+  // --- Info kontak Anda ---
   const contacts = [
     {
       name: "Email",
       value: "abudicky75@gmail.com",
-      href: "mailto:emailanda@example.com",
+      href: "mailto:abudicky75@gmail.com",
       icon: <Mail size={20} />,
     },
     {
       name: "Telepon",
       value: "+62 851 8304 1214",
-      href: "tel:+6281234567890",
+      href: "tel:+6285183041214",
       icon: <Phone size={20} />,
     },
     {
       name: "Lokasi",
       value: "Tangerang, Banten, Indonesia",
-      href: "#",
+      href: "#", // Anda bisa ganti dengan link Google Maps jika mau
       icon: <MapPin size={20} />,
     },
   ];
@@ -344,7 +340,37 @@ const ContactTable = () => {
       <h2 className="text-3xl font-bold mb-8 text-center sm:text-left text-black dark:text-white">
         Kontak Saya
       </h2>
-      <div className="overflow-x-auto">
+
+      {/* --- TAMPILAN MOBILE: LIST (BARU) ---
+        'sm:hidden' berarti ini akan HILANG di layar besar (desktop)
+      */}
+      <div className="flex flex-col gap-4 sm:hidden">
+        {contacts.map((contact) => (
+          <a
+            key={contact.name}
+            href={contact.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            // Setiap item kontak adalah 'kartu' yang bisa diklik
+            className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 flex flex-col gap-2 transition-transform active:scale-[0.98] active:bg-gray-100 dark:active:bg-gray-700"
+          >
+            <div className="flex items-center gap-3 text-sm font-medium text-gray-900 dark:text-white">
+              {contact.icon}
+              {contact.name}
+            </div>
+            <div className="text-base text-gray-600 dark:text-gray-300 break-words">
+              {/* 'break-words' agar email atau teks panjang bisa pindah baris */}
+              {contact.value}
+            </div>
+          </a>
+        ))}
+      </div>
+
+      {/* --- TAMPILAN DESKTOP: TABLE (KODE LAMA ANDA) ---
+        'hidden sm:block' berarti ini akan TERSEMBUNYI di mobile
+        dan tampil sebagai 'block' di layar 'sm' (desktop) ke atas.
+      */}
+      <div className="hidden sm:block overflow-x-auto">
         <div className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -359,6 +385,8 @@ const ContactTable = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
                     <a
                       href={contact.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="hover:underline hover:text-blue-500"
                     >
                       {contact.value}
